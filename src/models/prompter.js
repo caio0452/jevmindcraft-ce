@@ -110,6 +110,11 @@ export class Prompter {
     }
 
     async initExamples() {
+        // TEMP (Jev-only testing): examples/embeddings only feed LLM prompts.
+        if (this.agent.isJevOnly?.()) {
+            console.log('Jev-only mode: skipping example/embedding init (no LLM calls).');
+            return;
+        }
         try {
             this.convo_examples = new Examples(this.embedding_model, settings.num_examples);
             this.coding_examples = new Examples(this.embedding_model, settings.num_examples);
