@@ -89,6 +89,9 @@ export class NPCContoller {
 
         if (!this.data.do_set_goal) return;
 
+        // TEMP (Jev-only testing): NPC goal-setting needs the chat LLM.
+        if (this.agent.isJevOnly?.()) return;
+
         let past_goals = {...this.last_goals};
         for (let goal in this.data.goals) {
             if (past_goals[goal.name] === undefined) past_goals[goal.name] = true;

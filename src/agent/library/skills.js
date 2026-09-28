@@ -1973,7 +1973,7 @@ export async function goToSurface(bot) {
             continue;
         }
         await goToPosition(bot, block.position.x, block.position.y + 1, block.position.z, 0); // this will probably work most of the time but a custom mining and towering up implementation could be added if needed
-        log(bot, `Going to the surface at y=${y+1}.`);``
+        log(bot, `Going to the surface at y=${y+1}.`);
         return true;
     }
     return false;

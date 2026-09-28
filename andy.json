@@ -2,6 +2,11 @@
     "name": "andy",
 
     "model": "andy/auto/mindcraft",
-    "embedding": "andy/auto/mindcraft"
+    "embedding": "andy/auto/mindcraft",
 
+    "decision_model": {
+        "api": "jev",
+        "model": "typesafe/jev-1.13"
+    },
+    "jev_autonomous": true
 }

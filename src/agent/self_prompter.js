@@ -13,6 +13,9 @@ export class SelfPrompter {
     }
 
     start(prompt) {
+        // TEMP (Jev-only testing): self-prompting needs the chat LLM.
+        if (this.agent.isJevOnly?.())
+            return 'Self-prompting (LLM) is disabled in Jev-only testing mode.';
         console.log('Self-prompting started.');
         if (!prompt) {
             if (!this.prompt)
@@ -87,6 +90,8 @@ export class SelfPrompter {
     }
 
     update(delta) {
+        // TEMP (Jev-only testing): never auto-restart the LLM prompt loop.
+        if (this.agent.isJevOnly?.()) return;
         // automatically restarts loop
         if (this.state === ACTIVE && !this.loop_active && !this.interrupt) {
             if (this.agent.isIdle())

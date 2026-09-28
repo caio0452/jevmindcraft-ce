@@ -31,6 +31,11 @@ export class History {
     }
 
     async summarizeMemories(turns) {
+        // TEMP (Jev-only testing): memory summaries need the chat LLM.
+        if (this.agent.isJevOnly?.()) {
+            console.log('Jev-only mode: skipping LLM memory summary.');
+            return;
+        }
         console.log("Storing memories...");
         this.memory = await this.agent.prompter.promptMemSaving(turns);
 

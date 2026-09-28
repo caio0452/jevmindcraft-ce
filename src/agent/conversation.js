@@ -294,7 +294,8 @@ async function _scheduleProcessInMessage(sender, received, convo) {
             scheduleResponse(fastDelay);
         }
         else {
-            let shouldRespond = await agent.prompter.promptShouldRespondToBot(received.message);
+            // TEMP (Jev-only testing): never ask the LLM; stay on task.
+            let shouldRespond = agent.isJevOnly?.() ? false : await agent.prompter.promptShouldRespondToBot(received.message);
             console.log(`${agent.name} decided to ${shouldRespond?'respond':'not respond'} to ${sender}`);
             if (shouldRespond)
                 scheduleResponse(fastDelay);

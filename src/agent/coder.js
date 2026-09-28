@@ -29,6 +29,9 @@ export class Coder {
     }
 
     async generateCode(agent_history) {
+        // TEMP (Jev-only testing): code generation needs the coding LLM.
+        if (this.agent.isJevOnly?.())
+            return 'Code generation (LLM) is disabled in Jev-only testing mode.';
         this.agent.bot.modes.pause('unstuck');
         lockdown();
         // this message history is transient and only maintained in this function

@@ -9,6 +9,7 @@ import { ActionManager } from './action_manager.js';
 import { NPCContoller } from './npc/controller.js';
 import { MemoryBank } from './memory_bank.js';
 import { SelfPrompter } from './self_prompter.js';
+import { jevProgression } from './jev/jev_progression.js';
 import convoManager from './conversation.js';
 import { handleTranslation, handleEnglishTranslation } from '../utils/translator.js';
 import { addBrowserViewer } from './vision/browser_viewer.js';
@@ -121,6 +122,14 @@ export class Agent {
               
                 this._setupEventHandlers(save_data, init_message);
                 this.startEvents();
+
+                // TEMP (Jev-only testing): no LLM/self-prompt loop drives the
+                // bot, so start the Jev progression loop automatically.
+                // Use !jevStop to stop it, !jevStep for single steps.
+                if (this.isJevOnly()) {
+                    console.log('[jev] Jev-only mode: starting autonomous progression loop.');
+                    jevProgression.startAuto(this);
+                }
               
                 if (!load_mem) {
                     if (settings.task) {
@@ -317,6 +326,9 @@ export class Agent {
             max_responses = 1; // force only respond to this message, then let self-prompting take over
         for (let i=0; i<max_responses; i++) {
             if (checkInterrupt()) break;
+            // TEMP (Jev-only testing): skip the chat LLM entirely. User-typed
+            // !commands were already executed above; nothing else to say.
+            if (this.isJevOnly()) break;
             let history = this.history.getHistory();
             let res = await this.prompter.promptConvo(history);
 
@@ -526,6 +538,14 @@ export class Agent {
 
     isIdle() {
         return !this.actions.executing;
+    }
+
+    // TEMP (Jev-only testing): when jev_autonomous is set in the profile,
+    // the bot must not make ANY LLM calls (chat, codegen, vision, memory
+    // summaries, embeddings). Jev (a decision model, not an LLM) drives via
+    // !jevStep / !jevAuto. Set profile.jev_autonomous=false to restore LLMs.
+    isJevOnly() {
+        return !!this.prompter?.profile?.jev_autonomous;
     }
     
 

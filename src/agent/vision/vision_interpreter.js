@@ -65,6 +65,9 @@ export class VisionInterpreter {
     }
 
     async analyzeImage(filename) {
+        // TEMP (Jev-only testing): image analysis needs the vision LLM.
+        if (this.agent.isJevOnly?.())
+            return 'Vision (LLM) is disabled in Jev-only testing mode.';
         try {
             const imageBuffer = fs.readFileSync(`${this.fp}/${filename}.jpg`);
             const messages = this.agent.history.getHistory();
